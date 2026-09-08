@@ -50,3 +50,36 @@ contract WeightedVoting is ERC20 {
         FOR,
         ABSTAIN
     }
+
+    // Array to store all issues
+    Issue[] internal issues;
+
+    // Mapping to track if tokens are claimed by an address
+    mapping(address => bool) public tokensClaimed;
+
+    uint256 public maxSupply = 1000000; // Maximum supply of tokens
+    uint256 public claimAmount = 100; // Amount of tokens to be claimed
+
+    string saltt = "any"; // Another string variable
+
+    // Constructor to initialize ERC20 token with a name and symbol
+    constructor(string memory _name, string memory _symbol)
+        ERC20(_name, _symbol)
+    {
+        issues.push(); // Pushing an empty issue to start from index 1
+    }
+
+    // Function to claim tokens
+    function claim() public {
+        // Check if all tokens have been claimed
+        if (totalSupply() + claimAmount > maxSupply) {
+            revert AllTokensClaimed();
+        }
+        // Check if the caller has already claimed tokens
+        if (tokensClaimed[msg.sender]) {
+            revert TokensClaimed();
+        }
+        // Mint tokens to the caller
+        _mint(msg.sender, claimAmount);
+        tokensClaimed[msg.sender] = true; // Mark tokens as claimed
+    }
