@@ -42,6 +42,15 @@ contract FavoriteRecords {
     }
 
     /**
+     * @dev Returns the list of a user's favorite records
+     * @param _address The address of the user
+     * @return An array of user's favorite record names
+     */
+    function getUserFavorites(address _address) public view returns (string[] memory) {
+        return userFavoritesIndex[_address];
+    }
+
+    /**
      * @dev Returns the list of approved records
      * @return An array of approved record names
      */
