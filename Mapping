@@ -18,3 +18,51 @@ contract FavoriteRecords {
 
     // Custom error to handle unapproved records
     error NotApproved(string albumName);
+
+    /**
+     * @dev Constructor that initializes the approved records list
+     */
+    constructor() {
+        // Predefined list of approved records
+        approvedRecordsIndex = [
+            "Thriller", 
+            "Back in Black", 
+            "The Bodyguard", 
+            "The Dark Side of the Moon", 
+            "Their Greatest Hits (1971-1975)", 
+            "Hotel California", 
+            "Come On Over", 
+            "Rumours", 
+            "Saturday Night Fever"
+        ];
+        // Initialize the approved records mapping
+        for (uint i = 0; i < approvedRecordsIndex.length; i++) {
+            approvedRecords[approvedRecordsIndex[i]] = true;
+        }
+    }
+
+    /**
+     * @dev Returns the list of approved records
+     * @return An array of approved record names
+     */
+    function getApprovedRecords() public view returns (string[] memory) {
+        return approvedRecordsIndex;
+    }
+
+    /**
+     * @dev Adds an approved record to the user's favorites
+     * @param _albumName The name of the album to be added
+     */
+    function addRecord(string memory _albumName) public {
+        // Check if the record is approved
+        if (!approvedRecords[_albumName]) {
+            revert NotApproved({albumName: _albumName});
+        }
+        // Check if the record is not already in the user's favorites
+        if (!userFavorites[msg.sender][_albumName]) {
+            // Add the record to the user's favorites
+            userFavorites[msg.sender][_albumName] = true;
+            // Add the record to the user's favorites index
+            userFavoritesIndex[msg.sender].push(_albumName);
+        }
+    }
