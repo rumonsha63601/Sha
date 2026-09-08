@@ -13,3 +13,11 @@ contract AddressBookFactory {
     function deploy() external returns (AddressBook) {
         // Create a new instance of AddressBook
         AddressBook newAddressBook = new AddressBook();
+
+        // Transfer ownership of the new AddressBook contract to the caller of this function
+        newAddressBook.transferOwnership(msg.sender);
+
+        // Return the newly created AddressBook contract
+        return newAddressBook;
+    }
+}
